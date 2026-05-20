@@ -18,6 +18,8 @@ var orderedListRegex = regexp.MustCompile(`^\d+\.\s(.*)`)
 var tableSeparatorRegex = regexp.MustCompile(`^[|\s\-:]+$`)
 var tableCellRegex = regexp.MustCompile(`\|`)
 
+var multipleBlankLines = regexp.MustCompile(`\n{2,}`)
+
 func ConvertMdToTxt(file *os.File) string {
 	scanner := bufio.NewScanner(file)
 	var sb strings.Builder
@@ -57,7 +59,7 @@ func ConvertMdToTxt(file *os.File) string {
 
 	}
 
-	return sb.String()
+	return multipleBlankLines.ReplaceAllString(sb.String(), "\n")
 }
 
 func removeInlineMarkings(line string) string {

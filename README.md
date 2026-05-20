@@ -8,6 +8,14 @@ A CLI tool to convert Markdown files to plain text by stripping all Markdown for
 
 ## Installation
 
+### Using go install
+
+```bash
+go install github.com/sainukala225/mdstrip@latest
+```
+
+### Manual
+
 Clone the repository, build the binary, and move it to your local bin:
 
 ```bash
@@ -23,8 +31,12 @@ cp mdstrip ~/.local/bin/
 mdstrip [--output <file.txt>] <file.md>
 ```
 
-You can also pass the input file via flag:
+Read from stdin:
+```bash
+cat file.md | mdstrip
+```
 
+You can also pass the input file via flag:
 ```bash
 mdstrip --filename <file.md> [--output <file.txt>]
 ```
@@ -52,6 +64,11 @@ mdstrip --output out.txt README.md
 Using flags for both:
 ```bash
 mdstrip --filename README.md --output out.txt
+```
+
+Read from stdin:
+```bash
+echo "# Hello **world**" | mdstrip
 ```
 
 ## What gets stripped

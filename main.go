@@ -3,9 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"mdstrip/converter"
 	"os"
 	"strings"
+
+	"github.com/sainukala225/mdstrip/converter"
 )
 
 func main() {
@@ -23,33 +24,32 @@ func main() {
 
 	args := flag.Args()
 	var file string
+	var fileptr *os.File
+	var err error
 
-	if *filename != "" {
-		file = *filename
-	} else if len(args) > 0 {
-		file = args[0]
-	} else {
-		printhelpmessage()
-		return
-	}
-
-	if !isvalidfile(file, ".md") {
-		return
-	}
-
-	fileptr, err := os.Open(file)
-
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	defer func() {
-		err = fileptr.Close()
+	if *filename != "" || len(args) > 0 {
+		if *filename != "" {
+			file = *filename
+		} else {
+			file = args[0]
+		}
+		if !isvalidfile(file, ".md") {
+			return
+		}
+		fileptr, err = os.Open(file)
 		if err != nil {
 			fmt.Println(err)
+			return
 		}
-	}()
+		defer func() {
+			err = fileptr.Close()
+			if err != nil {
+				fmt.Println(err)
+			}
+		}()
+	} else {
+		fileptr = os.Stdin
+	}
 
 	plaintext := converter.ConvertMdToTxt(fileptr)
 	if *output == "" {
